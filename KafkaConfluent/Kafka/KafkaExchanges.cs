@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using Confluent.Kafka;
 using IO;
 using Model;
@@ -12,10 +12,10 @@ namespace KafkaSpace
         private IOWork io = new IOWork();
         private Utils utils = new Utils("");
         private CryptUtils? cuilts = null;
-        private Settings cfg = new Settings();
+        private static Settings cfg = new Settings();
         private Acks acks = Acks.None;
-        public KafkaExchanges(Settings cfg) {
-            this.cfg = cfg;
+        public KafkaExchanges(Settings cfg_) {
+            cfg = cfg_;
             log = new Log("Exchanges");
             cuilts = new CryptUtils(0, 0, 0, 0, utils);
         }
@@ -29,7 +29,15 @@ namespace KafkaSpace
                 while (true)
                 {                    
                     var scommand = Console.ReadLine();
-                    Producer(scommand, cfg.userName + Static.PairSeparator + cfg.destination[0].name + Static.PairSeparator);
+                    var p = ParseCommandLineInput(scommand);                  
+                    
+                    Producer(p.commandline,
+                        cfg.userName + Static.PairSeparator +
+                        ((!string.IsNullOrEmpty(p.username)) ? p.username
+                                                             : cfg.destination[0].name
+                        )
+                        + Static.PairSeparator);
+                    
                 }
             }
         }
@@ -63,13 +71,13 @@ namespace KafkaSpace
             }
         }
 
+        Func<string, destination> destinationFuncFull = (a) => {
+            var r = cfg.destination.Where(x => x.name == a).FirstOrDefault();
+            return r;
+        };
+
         public void Consumer()
         {            
-            Func<string, destination> destinationFuncFull = (a) => {
-                var r = cfg.destination.Where(x => x.name == a).FirstOrDefault();
-                return r;
-            };
-
             var conf = new ConsumerConfig
             {
                 ClientId=cfg.userName,
@@ -202,6 +210,32 @@ namespace KafkaSpace
                 uid = uid,
             };
             return result;
+        }
+
+        private (string username, string commandline) ParseCommandLineInput(string s)
+        {
+            var username = "";
+            var command = "";
+            if(string.IsNullOrEmpty(s)) return (username, command);
+
+            s = s.TrimStart();
+            var arr = s.Split(' ');
+
+            if (arr != null && arr.Length > 1)
+            {
+                var f = destinationFuncFull(arr[0]);
+                if (f != null)
+                {
+                    username = arr[0];
+                    command = s.Substring(username.Length).TrimStart();
+                }
+                else
+                    command = s;                
+            }
+            else
+                command = s;
+
+            return (username, command);
         }
 
     }
