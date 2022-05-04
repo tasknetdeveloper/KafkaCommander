@@ -1,6 +1,8 @@
 # KafkaCommander
 KafkaCommander - this is example of work with command line on remote computer using Kafka
 
+![screen1](https://user-images.githubusercontent.com/56368289/166828176-a22f0a2e-20cc-497d-a9f1-0551bab6b46a.png)
+
 You need to use two clients.
 Theese should send messages each other.
 Theese must tohave different config files (look appsettings.json file).
@@ -69,7 +71,4 @@ For example, you can use two destiantions:
 Now, release have two commands.
 getDrive - it show all drives of remote computer.
 getDir - it show all folders and files by path of remote computer.
-In future the list of commands will have more
-
-Screenshort of work
-![screen1](https://user-images.githubusercontent.com/56368289/166828176-a22f0a2e-20cc-497d-a9f1-0551bab6b46a.png)
+In future the list of commands will have more...
