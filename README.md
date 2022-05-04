@@ -9,7 +9,7 @@ Theese must tohave different config files (look appsettings.json file).
 
 For example, first client have config:
 
-{
+
   "Settings": {
     "urlKafka": "..insert here url of kafka server",
     "userName": "user0",
@@ -24,11 +24,10 @@ For example, first client have config:
       }
     ]
   }
-}
+
 
 and second client have config:
 
-{
   "Settings": {
     "urlKafka": "..insert here url of kafka server",
     "userName": "user1",
@@ -43,7 +42,6 @@ and second client have config:
       }
     ]
   }
-}
 
 
 P.S. Destination is clients, which will recieve message from sender client.
